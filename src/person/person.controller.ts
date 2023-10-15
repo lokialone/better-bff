@@ -7,13 +7,17 @@ import {
   Param,
   Delete,
   Query,
+  Inject,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
+import { UserService } from '../user/user.service';
 
 @Controller('api/person')
 export class PersonController {
+  @Inject(UserService)
+  private readonly userService: UserService;
   constructor(private readonly personService: PersonService) {}
 
   @Post()
@@ -26,7 +30,9 @@ export class PersonController {
   }
   @Get('find')
   query(@Query('name') name: string, @Query('age') age: number) {
-    return `received: name=${name},age=${age}`;
+    const id = age;
+    console.log('name', name);
+    return this.userService.findOne(id);
   }
   @Get(':id')
   findOne(@Param('id') id: string) {
