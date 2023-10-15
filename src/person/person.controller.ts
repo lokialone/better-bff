@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   Inject,
+  OnModuleInit,
 } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePersonDto } from './dto/create-person.dto';
@@ -15,7 +16,7 @@ import { UpdatePersonDto } from './dto/update-person.dto';
 import { UserService } from '../user/user.service';
 
 @Controller('api/person')
-export class PersonController {
+export class PersonController implements OnModuleInit {
   @Inject(UserService)
   private readonly userService: UserService;
   constructor(private readonly personService: PersonService) {}
@@ -23,6 +24,9 @@ export class PersonController {
   @Post()
   create(@Body() createPersonDto: CreatePersonDto) {
     return this.personService.create(createPersonDto);
+  }
+  onModuleInit() {
+    console.log('person controller is init');
   }
   @Get()
   findAll() {
